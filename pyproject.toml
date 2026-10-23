@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data-agents-in-action"
+version = "0.1.0"
+description = "Code for the book Data Agents in Action (Manning)."
+requires-python = ">=3.11"
+authors = [{ name = "Abdulrafiu Izuafa" }]
+license = "MIT"
+
+# Only kora/ is a package. Without this, setuptools sees the chapter
+# folders as extra packages and refuses to build.
+[tool.setuptools]
+packages = ["kora"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 76
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]

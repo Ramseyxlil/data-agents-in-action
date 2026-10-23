@@ -1,0 +1,4 @@
+# What you need to run the code. Model provider SDKs are added in
+# chapter 2, when the agent first talks to a model.
+duckdb>=2.0
+python-dotenv>=1.2

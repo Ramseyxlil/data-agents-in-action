@@ -1,0 +1,9 @@
+# Let git pick line endings for anything it thinks is text.
+* text=auto
+
+# Force LF for source files so Windows and Mac readers get the same
+# bytes, and diffs don't fill up with line ending changes.
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf

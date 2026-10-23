@@ -1,0 +1,37 @@
+name: tests
+
+# Run on every push and pull request to main, so a broken listing
+# never sits there unnoticed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      # Test the oldest Python the book supports and the next one up.
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      # Lint first. It's the fastest check and catches the most typos.
+      - name: Lint
+        run: ruff check .
+
+      # The book prints code at 76 characters, so the repo must too.
+      - name: Check line length
+        run: python scripts/check_line_length.py
+
+      - name: Run tests
+        run: pytest

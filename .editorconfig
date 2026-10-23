@@ -1,0 +1,17 @@
+# Top-level config, so editors stop looking in parent folders.
+root = true
+
+# The book prints code at 76 characters per line, so editors show the
+# same limit while you type.
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 76
+
+# YAML files read better with the usual 2-space indent.
+[*.{yml,yaml}]
+indent_size = 2
