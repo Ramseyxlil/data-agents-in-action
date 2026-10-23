@@ -1,17 +1,20 @@
-"""Set up Kora's local database.
+"""Build Kora's local database.
 
-For now this only checks your environment and prepares the data/
-folder. The dataset generator arrives with chapter 1.
+Run it from the repo root:
+
+    python scripts/setup_kora.py
+
+Add --force to rebuild, --parquet to also export Parquet files, and
+--noise-tables N to add N extra tables that mean nothing (chapter 5).
 """
 
-import os
+import argparse
 import sys
 from pathlib import Path
 
-# The repo root is one level up from scripts/. We resolve paths from
-# here so the script works no matter which folder you run it from.
+# The repo root is one level up from scripts/. Python only looks in
+# scripts/ by default, so we add the root to find the kora package.
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_DB_PATH = "data/kora.duckdb"
 
 
 def check_python_version():
@@ -27,41 +30,65 @@ def check_python_version():
         sys.exit(1)
 
 
-def load_settings():
-    # Import here, not at the top, so a missing package gets a friendly
-    # hint instead of an ImportError before anything else runs.
-    try:
-        from dotenv import load_dotenv
-    except ImportError:
-        print("python-dotenv is not installed.")
-        print("Run: pip install -r requirements.txt")
-        sys.exit(1)
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        description="Build Kora's DuckDB database."
+    )
+    parser.add_argument(
+        "--db-path",
+        help="where to write the database (default: KORA_DB_PATH "
+             "from .env, or data/kora.duckdb)",
+    )
+    parser.add_argument(
+        "--force", action="store_true",
+        help="overwrite the database if it already exists",
+    )
+    parser.add_argument(
+        "--parquet", action="store_true",
+        help="also export every table to a parquet/ folder next to "
+             "the database",
+    )
+    parser.add_argument(
+        "--noise-tables", type=int, default=0, metavar="N",
+        help="also create N extra tables named noise_0001 and so on",
+    )
+    return parser.parse_args(argv)
 
-    # A .env file is optional. If it is missing, we use the defaults.
-    env_file = REPO_ROOT / ".env"
-    if env_file.exists():
-        load_dotenv(env_file)
 
-    db_path = Path(os.getenv("KORA_DB_PATH") or DEFAULT_DB_PATH)
-
-    # A relative path in .env means "relative to the repo", not to
-    # wherever the reader happens to be standing in the terminal.
-    if not db_path.is_absolute():
-        db_path = REPO_ROOT / db_path
-    return db_path
-
-
-def main():
+def main(argv=None):
     check_python_version()
-    db_path = load_settings()
+    args = parse_args(argv)
 
-    # Create the folder now, so the generator never trips over a
-    # missing directory when it arrives.
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+    sys.path.insert(0, str(REPO_ROOT))
+    # Import after the version check, and with a friendly hint if the
+    # packages aren't installed yet.
+    try:
+        import kora
+        from kora.config import resolve_db_path
+    except ImportError as error:
+        print(f"A package is missing: {error.name}")
+        print("Run: pip install -r requirements.txt")
+        return 1
 
-    print("The Kora dataset generator arrives with chapter 1.")
-    print("Once it does, this script will build the database at:")
-    print(f"    {db_path}")
+    db_path = resolve_db_path(args.db_path)
+    if db_path.exists() and not args.force:
+        # Leave an existing database alone. Rebuilding gives the same
+        # data anyway, so there is no reason to do it by surprise.
+        print(f"Kora's database already exists at {db_path}")
+        print("Nothing to do. Use --force to rebuild it.")
+        return 0
+
+    parquet_dir = db_path.parent / "parquet" if args.parquet else None
+    print(f"Building Kora's database at {db_path} ...")
+    result = kora.build(db_path, noise_tables=args.noise_tables,
+                        parquet_dir=parquet_dir)
+
+    width = max(len(name) for name in result.row_counts)
+    for name, count in result.row_counts.items():
+        print(f"    {name:<{width}}  {count:>9,}")
+    if parquet_dir is not None:
+        print(f"Parquet files written to {parquet_dir}")
+    print(f"Done in {result.seconds:.1f} seconds.")
     return 0
 
 

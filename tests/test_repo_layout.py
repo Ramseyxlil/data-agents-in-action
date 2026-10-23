@@ -23,6 +23,17 @@ EXPECTED_FILES = [
     ".github/workflows/tests.yml",
     "kora/__init__.py",
     "kora/README.md",
+    "kora/config.py",
+    "kora/calendar.py",
+    "kora/generate.py",
+    "kora/load.py",
+    "kora/story.py",
+    "kora/numbers.py",
+    "ch01/listing_1_1.sql",
+    "ch01/run_listing_1_1.py",
+    "ch01/numbers.json",
+    "tests/kora/__init__.py",
+    "tests/kora/conftest.py",
     "scripts/setup_kora.py",
     "scripts/check_line_length.py",
     "data/.gitkeep",
@@ -69,6 +80,8 @@ COAUTHOR_LINE = "co-" + "authored-by"
 # else it would only show up as a tool credit.
 PROVIDER_NAME_ALLOWED = {"README.md", ".env.example"}
 
+# data/ holds the generated database, which git never sees, so it is
+# not part of the repo and can be hundreds of megabytes to read.
 SKIP_DIRS = {
     ".venv",
     "venv",
@@ -76,6 +89,7 @@ SKIP_DIRS = {
     "__pycache__",
     ".pytest_cache",
     ".ruff_cache",
+    "data",
 }
 
 

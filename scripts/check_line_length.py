@@ -24,7 +24,7 @@ SKIP_DIRS = {
 }
 
 # Every line in these files is code, so every line is checked.
-CODE_SUFFIXES = {".py", ".toml", ".yml", ".yaml"}
+CODE_SUFFIXES = {".py", ".toml", ".yml", ".yaml", ".sql"}
 
 
 def files_to_check(root):

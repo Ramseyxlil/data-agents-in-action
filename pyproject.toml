@@ -17,6 +17,9 @@ packages = ["kora"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "slow: long-running checks; skip with -m \"not slow\"",
+]
 
 [tool.ruff]
 line-length = 76

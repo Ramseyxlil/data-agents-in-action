@@ -48,9 +48,12 @@ python scripts/setup_kora.py
 pytest
 ```
 
-The `setup_kora.py` step builds Kora's database. The dataset generator
-arrives with chapter 1, so until then this script only prints a short
-message.
+The `setup_kora.py` step builds Kora's database and writes it to
+`data/kora.duckdb` (about 70 MB). It takes about 30 seconds on a
+normal laptop and prints a row count for every table when it is done.
+If the database is already there, the script leaves it alone. Add
+`--force` to rebuild it. The same seed gives the same data every time,
+so a rebuild never changes the book's numbers.
 
 To run the tests and the style checks, install the developer tools too:
 
@@ -110,6 +113,9 @@ ruff check .
 
 The first one keeps every code line at 76 characters or fewer, the
 width the book prints at. The second one is a linter.
+
+The Kora tests build the database a few times to prove it comes out
+the same on every run, so the full suite takes a couple of minutes.
 
 ## Found a problem?
 
