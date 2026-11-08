@@ -74,6 +74,13 @@ pip install -r requirements-dev.txt
 | `tests/` | Tests. Each chapter's tests are its definition of done. |
 | `data/` | Where your local Kora database is written. Not committed to git. |
 
+Chapters with code so far:
+
+- `ch01/`: chapter 1, why data agents. The wrong revenue query
+  (listing 1.1) and the numbers the chapter quotes.
+- `ch02/`: chapter 2, your first working data agent. A plain Python
+  agent loop with a run_sql tool and a structured answer.
+
 ## Meet Kora
 
 Kora is a made-up mid-size retailer with stores in four regions (North,

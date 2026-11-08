@@ -1,0 +1,66 @@
+# The functions in ch02/end that the reader writes, and the TODO hint
+# scripts/make_start.py leaves in their place in ch02/start.
+#
+# Rebuild ch02/start after changing ch02/end or this file:
+#     python scripts/make_start.py ch02
+#
+# Long hints can wrap over several lines. Extra spaces and line breaks
+# are squashed into single spaces.
+
+[stubs."tools.py"]
+is_read_only = """
+    strip comments, then check the statement starts with select or
+    with."""
+execute = """
+    open DuckDB read-only, start a Timer that calls con.interrupt(),
+    run the query, fetch up to limit rows."""
+run_sql = """
+    guard, execute, catch errors into result['error'], cap rows and
+    set truncated."""
+describe_schema = """
+    query information_schema.columns and build one line per table."""
+
+[stubs."answer.py"]
+format_answer = """
+    build the lines: value, explanation, each assumption, then the
+    SQL."""
+
+[stubs."models.py"]
+to_openai_tools = """
+    wrap each tool as {'type': 'function', 'function': tool}."""
+to_openai_messages = """
+    put the system message first, turn tool calls and tool results
+    into OpenAI's shapes."""
+from_openai_response = """
+    read text, tool calls and token counts from choices[0].message."""
+"OpenAIModel.complete" = """
+    call client.chat.completions.create with temperature 0."""
+to_anthropic_tools = "rename parameters to input_schema."
+to_anthropic_messages = """
+    turn tool calls into tool_use blocks and results into tool_result
+    blocks in a user turn."""
+from_anthropic_response = """
+    collect text blocks, tool_use blocks and usage."""
+"AnthropicModel.complete" = """
+    call client.messages.create with system, messages and tools."""
+make_model = """
+    pick OpenAIModel or AnthropicModel from MODEL_PROVIDER, using
+    require() for settings."""
+
+[stubs."agent.py"]
+build_system_prompt = """
+    fill SYSTEM_PROMPT_TEMPLATE with the weekday, date and
+    describe_schema()."""
+run_agent = """
+    loop up to max_turns: call the model, handle plain text with one
+    nudge, run each tool call, return on a valid final_answer."""
+call_model = """
+    call model.complete, add up usage, append a 'model' step to the
+    trace, return None on failure."""
+handle_tool_call = """
+    run_sql goes to use_run_sql, final_answer is validated with
+    pydantic."""
+use_run_sql = """
+    run the SQL, record a run_sql step and a sql_result step (with the
+    columns and the first TRACE_ROWS rows), return the result as JSON
+    text."""

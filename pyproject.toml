@@ -16,9 +16,18 @@ license = "MIT"
 packages = ["kora"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "ch02/end/tests"]
+# importlib mode names each test module by its full path, so every
+# chapter can have its own test_agent.py without clashing. It no
+# longer adds folders to sys.path, so the repo root goes on it here
+# for the kora package.
+pythonpath = ["."]
+# Live tests call a real model and cost money, so a plain pytest run
+# skips them. Run them with: pytest -m live
+addopts = "--import-mode=importlib -m \"not live\""
 markers = [
     "slow: long-running checks; skip with -m \"not slow\"",
+    "live: calls a real model provider; needs an API key in .env",
 ]
 
 [tool.ruff]

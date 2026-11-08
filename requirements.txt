@@ -1,4 +1,7 @@
-# What you need to run the code. Model provider SDKs are added in
+# What you need to run the code. The model provider SDKs arrived in
 # chapter 2, when the agent first talks to a model.
 duckdb>=2.0
 python-dotenv>=1.2
+pydantic>=2.14
+openai>=3.46
+anthropic>=2.6

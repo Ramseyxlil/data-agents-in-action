@@ -76,9 +76,25 @@ TOOL_COMPANY = "anthro" + "pic"
 COAUTHOR_LINE = "co-" + "authored-by"
 
 # The company name is also a model provider the book supports, so the
-# readme and the settings template must be able to name it. Anywhere
-# else it would only show up as a tool credit.
-PROVIDER_NAME_ALLOWED = {"README.md", ".env.example"}
+# files that set up or call that provider must be able to name it.
+# Each one is listed by hand, on purpose. Anywhere else it would only
+# show up as a tool credit.
+PROVIDER_NAME_ALLOWED = {
+    "README.md",
+    ".env.example",
+    "requirements.txt",
+    "ch02/README.md",
+    "ch02/LISTINGS.md",
+    "ch02/start_stubs.toml",
+    "ch02/end/models.py",
+    "ch02/end/ask.py",
+    "ch02/end/break_it.py",
+    "ch02/end/tests/test_models.py",
+    "ch02/end/tests/test_live.py",
+    "ch02/start/models.py",
+    "ch02/start/ask.py",
+    "ch02/start/break_it.py",
+}
 
 # data/ holds the generated database, which git never sees, so it is
 # not part of the repo and can be hundreds of megabytes to read.
@@ -93,10 +109,16 @@ SKIP_DIRS = {
 }
 
 
+# Your own .env holds real keys and is never committed, so the scan
+# leaves it alone. Reading secrets in a test is a habit to avoid.
+SKIP_FILES = {".env"}
+
+
 def repo_files():
     for path in sorted(REPO_ROOT.rglob("*")):
         parts = path.relative_to(REPO_ROOT).parts[:-1]
-        if path.is_file() and not any(p in SKIP_DIRS for p in parts):
+        if (path.is_file() and path.name not in SKIP_FILES
+                and not any(p in SKIP_DIRS for p in parts)):
             yield path
 
 
