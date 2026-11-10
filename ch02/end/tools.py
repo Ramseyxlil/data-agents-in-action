@@ -6,6 +6,7 @@ from decimal import Decimal
 
 import duckdb
 
+# Listing 2.5: the run_sql tool as a JSON schema
 # The tool as the model sees it. The model never runs anything itself.
 # It asks for run_sql with an sql argument, and our code runs it.
 RUN_SQL_TOOL = {
@@ -27,6 +28,7 @@ RUN_SQL_TOOL = {
     },
 }
 
+# Listing 2.7: the read-only guard and the timed query
 COMMENTS = re.compile(r"--[^\n]*|/\*.*?\*/", re.DOTALL)
 
 
@@ -69,6 +71,7 @@ def to_json(value):
     return str(value)
 
 
+# Listing 2.8: run_sql, with errors returned as data
 def run_sql(sql, db_path, max_rows=200, timeout_s=10):
     """Run one query read-only and return a JSON-safe result dict.
 
@@ -96,6 +99,7 @@ def run_sql(sql, db_path, max_rows=200, timeout_s=10):
     return result
 
 
+# Listing 2.6: the schema text the model gets
 SCHEMA_SQL = """
     SELECT table_name, column_name, data_type
     FROM information_schema.columns

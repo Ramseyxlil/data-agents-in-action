@@ -1,5 +1,53 @@
-# Python build output and caches. These are rebuilt on every run, so
-# there is nothing worth keeping in git.
+# ------------------------------------------------------------------
+# Secrets
+# ------------------------------------------------------------------
+
+# Your real API keys live in .env. Never commit it. The .env.example
+# file has no secrets, so it stays in git as a template.
+.env
+!.env.example
+
+# ------------------------------------------------------------------
+# Generated data
+# ------------------------------------------------------------------
+
+# The Kora database is built on your machine by a seeded script, so it
+# never needs to be committed. Keep the empty folder, though.
+data/*
+!data/.gitkeep
+
+# DuckDB and Parquet files are generated data, wherever they end up.
+*.duckdb
+*.duckdb.wal
+*.parquet
+
+# break_it.py saves every run in a chapter's results/ folder. Those
+# are your results, not the book's code, so only the empty folder is
+# kept.
+ch*/*/results/*
+!ch*/end/results/.gitkeep
+
+# ------------------------------------------------------------------
+# Zipped and archived files
+# ------------------------------------------------------------------
+
+# Bundles made for sharing (a chapter sent to a reviewer, a backup).
+# The repo holds the real files, so the bundles stay out.
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+*.tgz
+*.bz2
+*.xz
+
+# ------------------------------------------------------------------
+# Python
+# ------------------------------------------------------------------
+
+# Build output and caches. They are rebuilt on every run, so there is
+# nothing worth keeping.
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -8,10 +56,14 @@ build/
 dist/
 *.egg-info/
 
-# Virtual environments. Each reader makes their own on their machine.
+# Virtual environments. Each reader makes their own.
 .venv/
 venv/
 env/
+
+# ------------------------------------------------------------------
+# Editors and operating systems
+# ------------------------------------------------------------------
 
 # Editor settings are personal, so they stay out of the shared repo.
 .vscode/
@@ -20,23 +72,3 @@ env/
 # Files the operating system drops into folders on its own.
 .DS_Store
 Thumbs.db
-
-# Your real API keys live in .env. Never commit it. The .env.example
-# file has no secrets, so it stays in git as a template.
-.env
-!.env.example
-
-# The Kora database is generated on your machine by a seeded script,
-# so it never needs to be committed. Keep the empty folder, though.
-data/*
-!data/.gitkeep
-
-# break_it.py saves every run here. Those are your results, not part
-# of the book's code, so only the empty folder is kept.
-ch02/*/results/*
-!ch02/end/results/.gitkeep
-
-# DuckDB and Parquet files are generated data, wherever they end up.
-*.duckdb
-*.duckdb.wal
-*.parquet

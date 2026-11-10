@@ -20,6 +20,7 @@ try:
 except ImportError:
     AS_OF = date(2026, 8, 10)
 
+# Listing 2.3: the naive system prompt
 # Deliberately naive: the schema and the date, nothing else. No
 # business definitions, no calendar rules. Chapters 4 and 5 add those.
 SYSTEM_PROMPT_TEMPLATE = """\
@@ -64,6 +65,7 @@ def build_system_prompt(db_path, as_of=None):
         schema=describe_schema(db_path))
 
 
+# Listing 2.4: the agent loop
 def run_agent(question, model, db_path, max_turns=6, as_of=None):
     """Answer one question: ask the model, run its tools, repeat."""
     system = build_system_prompt(db_path, as_of)
@@ -129,6 +131,7 @@ def assistant_message(reply):
             "tool_calls": calls}
 
 
+# Listing 2.9: running one tool call
 def handle_tool_call(call, db_path, result):
     """Run one tool call. Returns (answer, None) or (None, output)."""
     if call.name == "run_sql":

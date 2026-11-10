@@ -37,6 +37,7 @@ def parse_args(argv):
     return parser.parse_args(argv)
 
 
+# Listing 2.11: asking from the command line
 def main(argv=None):
     args = parse_args(argv)
     load_dotenv(REPO_ROOT / ".env")

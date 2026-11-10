@@ -21,6 +21,7 @@ import anthropic
 import openai
 
 
+# Listing 2.1: the reply types and the model interface
 @dataclass
 class ToolCall:
     id: str
@@ -114,6 +115,7 @@ def from_openai_response(response):
     return ModelReply(message.content, calls, usage)
 
 
+# Listing 2.2: calling OpenAI through that interface
 class OpenAIModel:
     """A chat model behind OpenAI's Chat Completions API."""
 

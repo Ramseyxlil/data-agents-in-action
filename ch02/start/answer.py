@@ -7,6 +7,7 @@
 from pydantic import BaseModel, Field
 
 
+# Listing 2.10: the Answer model and the final_answer tool
 class Answer(BaseModel):
     """A checkable answer: the number, and how the agent got it."""
 
